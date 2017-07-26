@@ -1,0 +1,13 @@
+﻿<Window x:Class="WpfApplication1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="508.6" Width="525">
+    <Grid Margin="0,0,-8,-119">
+        <TextBox Name="EnterTextBox" HorizontalAlignment="Left" Height="23" Margin="102,24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="222,82,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <Image Name="Setimage" HorizontalAlignment="Left" Height="100" Margin="178,219,0,0" VerticalAlignment="Top" Width="100"/>
+        <Label Name="AgeLabel" Content="" HorizontalAlignment="Left" Margin="102,133,0,0" VerticalAlignment="Top" Width="90" Height="34"/>
+        <Label x:Name="ZodiacSignLabel" Content="" HorizontalAlignment="Left" Margin="342,133,0,0" VerticalAlignment="Top" Height="34" Width="86"/>
+
+    </Grid>
+</Window>
