@@ -1,0 +1,28 @@
+﻿<Window x:Class="WpfApplication1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="624" Width="525">
+    <Grid Margin="0,1,0,0" Height="592" VerticalAlignment="Top">
+        <Label Content="First Name" HorizontalAlignment="Left" Margin="51,1,0,0" VerticalAlignment="Top"/>
+        <Label Content="Last Name" HorizontalAlignment="Left" Margin="52,50,0,0" VerticalAlignment="Top"/>
+        <Label Content="Birth Date" HorizontalAlignment="Left" Margin="52,101,0,0" VerticalAlignment="Top"/>
+        <Label Content="Email" HorizontalAlignment="Left" Margin="52,171,0,0" VerticalAlignment="Top"/>
+        <Label Content="Phone number" HorizontalAlignment="Left" Margin="52,222,0,0" VerticalAlignment="Top"/>
+        <Label Content="Additional info" HorizontalAlignment="Left" Margin="52,271,0,0" VerticalAlignment="Top"/>
+        <Label Name="resultLabel" Content="" HorizontalAlignment="Left" Margin="213,391,0,0" VerticalAlignment="Top"/>
+        <TextBox  Name="FirstNameTb" MaxLength="255" HorizontalAlignment="Left" Height="23" Margin="51,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox  Name="LastNameTb" MaxLength="255" HorizontalAlignment="Left" Height="23" Margin="52,76,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox Name="dayTb" HorizontalAlignment="Left" Height="23" Margin="52,127,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="38" TextChanged="dayTb_TextChanged"/>
+        <TextBox x:Name="monthTb" HorizontalAlignment="Left" Height="23" Margin="102,127,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="38"/>
+        <TextBox x:Name="yearTb" HorizontalAlignment="Left" Height="23" Margin="154,127,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="38"/>
+        <TextBox  Name="EmailTb" MaxLength="255" HorizontalAlignment="Left" Height="23" Margin="52,197,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox Name="PhoneNumberTb" MaxLength="12"  HorizontalAlignment="Left" Height="23" Margin="52,248,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox Name="AdditionalInfoTb" MaxLength="2000" HorizontalAlignment="Left" Height="70" Margin="52,293,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="432"/>
+        <RadioButton  GroupName="gender" Name="MaleRadioButton" Content="Male" HorizontalAlignment="Left" Margin="52,155,0,0" VerticalAlignment="Top" IsChecked="True" Checked="MaleRadioButton_Checked"/>
+        <RadioButton  GroupName="gender" Name="FemaleRadioButton" Content="Female" HorizontalAlignment="Left" Margin="154,155,0,0" VerticalAlignment="Top" Checked="FemaleRadioButton_Checked"/>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="213,379,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <Label Content="Error list" HorizontalAlignment="Left" Margin="200,408,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="ErrorsAccured" Content="" HorizontalAlignment="Left" Margin="200,439,0,-21" VerticalAlignment="Top" Width="182" Height="139"/>
+
+    </Grid>
+</Window>

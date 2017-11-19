@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace ConsoleApplication18_1
 {
+  
     public delegate void AccountStateHandler(MobileAccount callReceiver,MobileAccount caller, string message);
     public class MobileAccount
     {
-        int _count;
-         MobileAccount[] numbersBook=new MobileAccount[10];
         public event AccountStateHandler Call;
         public event AccountStateHandler Message;
+        Dictionary<int, string> adressBook = new Dictionary<int, string>();
         public int Numerber { get; set; }
         public string Name { get; set; }
 
@@ -20,7 +20,6 @@ namespace ConsoleApplication18_1
         {
             Numerber = number;
             Name = name;
-            _count = 0;
         }
 
         public void SendMessage(MobileAccount account,string message)
@@ -34,35 +33,23 @@ namespace ConsoleApplication18_1
         }
         public void Receive(MobileAccount caller, string message)
         {
-            for (int i = 0; i <= _count; i++)
+            var name = adressBook.Where(p => p.Key == caller.Numerber).Select(p => p.Value).FirstOrDefault();
+            if (name==null)
             {
-
-                if (int.Equals(numbersBook[i].Numerber,caller.Numerber))
-                {
-                    Console.WriteLine("Received from: {0}", caller.Name);
-                    break;
-                }
-                else if (i == _count)
-                {
-                    Console.WriteLine("Received from: {0}", caller.Numerber);
-                }
+                Console.WriteLine("Received from: {0}", caller.Numerber);
             }
+            else
+            {
+                Console.WriteLine("Received from: {0}", name);
+            }
+                
+            
 
             Console.WriteLine("Message:  {0}", message);
         }
-        public void AddIntoNumbersBook(MobileAccount account)
+        public void AddIntoAddressBook(int number, string name)
         {
-            if (_count == numbersBook.Length)
-            {
-                var tempArray = new MobileAccount[numbersBook.Length + 10];
-                for (var i = 0; i < numbersBook.Length - 1; i++)
-                {
-                    tempArray[i] = numbersBook[i];
-                }
-                numbersBook = tempArray;
-            }
-            numbersBook[_count] = account;
-            _count++;
+            adressBook.Add(number, name);
         }
     }
 }
