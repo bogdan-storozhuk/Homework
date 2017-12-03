@@ -11,7 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using SerializationTypes;
+using WpfChatClient.SerializationTypes;
 using Shape = System.Windows.Shapes.Shape;
 
 namespace WpfChatClient
@@ -40,11 +40,12 @@ namespace WpfChatClient
         private const int Colums = 5;
         private Brush _selectedBrushColor;
         private int _lineThickness;
+        private SerializationLine _serializationLine;
         
         public MainWindow()
         {
             InitializeComponent();
-            _serverHandler = new ServerHandler("127.0.0.1", 8888,8889);
+            _serverHandler = new ServerHandler("127.0.0.1", 8888);
             ComboColors.ItemsSource = typeof(Brushes).GetProperties();
             _typeConverter = new BrushConverter();
         }
@@ -83,14 +84,8 @@ namespace WpfChatClient
         {
             _userName = LocalName.Text;
             ChatBox.AppendText(_serverHandler.ConnectClient(_userName));
-            ConfirmNicknameButton.IsEnabled = false;
-            LocalName.IsEnabled = false;
-            PaintSurface.IsEnabled = true;
-            SendMessageButton.IsEnabled = true;
-            var readMessage = new Task(ReadMessages);
-            readMessage.Start();
-            var readData=new Task(ReadData);
-            readData.Start();
+            var read = new Task(Read);
+            read.Start();
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -157,19 +152,17 @@ namespace WpfChatClient
                     };
                     
                     PaintSurface.Children.Add(line);
-                    var serializationLine = new SerializationLine(line.X1, line.Y1, line.X2, line.Y2, line.StrokeThickness, Convert.ToString(line.Stroke));
-                    _serverHandler.SendData(serializationLine);
+                    ChatBox.Dispatcher.Invoke(new Action<string>(s => ChatBox.AppendText(s)),line.Stroke + Environment.NewLine);//вывод сообщения
+                    _serializationLine = new SerializationLine(line.X1, line.Y1, line.X2, line.Y2, line.StrokeThickness, Convert.ToString(line.Stroke));
+                    _serverHandler.SendData(_serializationLine);
+                    _serializationLine = null;
                     break;
                 case DrawType.Pen:
                     break;
                 case DrawType.Rectangle:
-                    var serializationRectangle = new SerializationRectangle(_rect.StrokeThickness, Convert.ToString(_rect.Stroke), _rect.Width, _rect.Height, Canvas.GetLeft(_rect),Canvas.GetTop(_rect));
-                    _serverHandler.SendData(serializationRectangle);
                     _rect = null;
                     break;
                 case DrawType.Ellipse:
-                    var serializationEllipse = new SerializationEllipse(_ellipse.StrokeThickness, Convert.ToString(_ellipse.Stroke), _ellipse.Width, _ellipse.Height, Canvas.GetLeft(_ellipse),Canvas.GetTop(_ellipse));
-                    _serverHandler.SendData(serializationEllipse);
                     _ellipse = null;
                     break;
                 default:
@@ -217,10 +210,9 @@ namespace WpfChatClient
                             Y2 = e.GetPosition(PaintSurface).Y,
                             StrokeThickness = _lineThickness
                         };
+
                         _startPoint = e.GetPosition(PaintSurface);
                         PaintSurface.Children.Add(drawPan);
-                        var serializationLine = new SerializationLine(drawPan.X1, drawPan.Y1, drawPan.X2, drawPan.Y2, drawPan.StrokeThickness, Convert.ToString(drawPan.Stroke));
-                        _serverHandler.SendData(serializationLine);
                     }
                     break;
                 case DrawType.Rectangle:
@@ -311,80 +303,14 @@ namespace WpfChatClient
         {
             _lineThickness = lineWidthComboBox.SelectedIndex+1;
         }
-        private void ReadMessages()
+        private void Read()
         {
             while (true)
             {
                 if (_serverHandler == null)
                     return;
-                var result = _serverHandler.ReceiveMessage();
+                var result = _serverHandler.ReceiveMessage2();
                 ChatBox.Dispatcher.Invoke(new Action<string>(s => ChatBox.AppendText(s)), result + Environment.NewLine);//вывод сообщения
-            }
-        }
-        private void ReadData()
-        {
-            while (true)
-            {
-                if (_serverHandler == null)
-                    return;
-                var result = _serverHandler.ReceiveData();
-
-                if (result is SerializationLine)
-                {
-                    var resultLine = result as SerializationLine;
-
-                    PaintSurface.Dispatcher.Invoke(new Action(() =>
-                    {
-                        var line = new Line
-                        {
-                            X1 = resultLine.StartPositionX,
-                            Y1 = resultLine.StartPositionY,
-                            X2 = resultLine.EndPositionX,
-                            Y2 = resultLine.EndPositionY,
-                            Stroke = (Brush)_typeConverter.ConvertFromString(resultLine.Color),
-                            StrokeThickness = resultLine.Size,
-                        };
-                        PaintSurface.Children.Add(line);
-                    }));
-                }
-                else if (result is SerializationEllipse)
-                {
-                    var resultEllipse = result as SerializationEllipse;
-
-                    PaintSurface.Dispatcher.Invoke(new Action(() =>
-                    {
-                        _ellipse = new Ellipse
-                        {
-                            Stroke = (Brush)_typeConverter.ConvertFromString(resultEllipse.Color),
-                            StrokeThickness = resultEllipse.Size,
-                            Height=resultEllipse.Height,
-                            Width=resultEllipse.Width,
-                        };
-
-                        Canvas.SetLeft(_ellipse,resultEllipse.Left);
-                        Canvas.SetTop(_ellipse, resultEllipse.Top);
-                        PaintSurface.Children.Add(_ellipse);
-                    }));
-                }
-                else if (result is SerializationRectangle)
-                {
-                    var resultRectangle = result as SerializationRectangle;
-
-                    PaintSurface.Dispatcher.Invoke(new Action(() =>
-                    {
-                        _rect = new Rectangle
-                        {
-                            Stroke = (Brush)_typeConverter.ConvertFromString(resultRectangle.Color),
-                            StrokeThickness = resultRectangle.Size,
-                            Height = resultRectangle.Height,
-                            Width = resultRectangle.Width,
-                        };
-
-                        Canvas.SetLeft(_rect, resultRectangle.Left);
-                        Canvas.SetTop(_rect, resultRectangle.Top);
-                        PaintSurface.Children.Add(_rect);
-                    }));
-                }
             }
         }
     }

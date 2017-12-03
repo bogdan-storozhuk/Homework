@@ -10,9 +10,9 @@
         <TextBox Height="23" HorizontalAlignment="Left" Margin="224,431,0,0" Name="LocalName" VerticalAlignment="Top" Width="287" />
         <Label Content="Message:" Height="28" HorizontalAlignment="Left" Margin="149,653,0,0" Name="Label5" VerticalAlignment="Top" />
         <TextBox Height="23" HorizontalAlignment="Left" Margin="206,654,0,0" Name="MessageText" VerticalAlignment="Top" Width="305" />
-        <Button Content="Send" Height="23" HorizontalAlignment="Left" Margin="517,654,0,0" Name="SendMessageButton" VerticalAlignment="Top" Width="117" Click="sendMessageButton_Click" IsEnabled="False"/>
+        <Button Content="Send" Height="23" HorizontalAlignment="Left" Margin="517,654,0,0" Name="SendMessageButton" VerticalAlignment="Top" Width="117" Click="sendMessageButton_Click"/>
         <Button Content="Confirm" Height="23" HorizontalAlignment="Left" Margin="517,431,0,0" Name="ConfirmNicknameButton" VerticalAlignment="Top" Width="117" Click="confirmNicknameButton_Click"/>
-        <Canvas Name="PaintSurface" MouseDown="Canvas_MouseDown" MouseUp="Canvas_MouseUp" MouseMove="Canvas_MouseMove" Background="white" Height="410" Margin="53,10,20,0" VerticalAlignment="Top" IsEnabled="False"/>
+        <Canvas Name="PaintSurface" MouseDown="Canvas_MouseDown" MouseUp="Canvas_MouseUp" MouseMove="Canvas_MouseMove" Background="white" Height="410" Margin="53,10,20,0" VerticalAlignment="Top"/>
         <ToolBarTray Orientation="Vertical" Margin="20,10,741,271" Background="#FF8C00">
             <ToolBar  VerticalAlignment="Top" Background="White" Margin="-21,0,-23,-115" Height="186">
                 <ToggleButton Name="LineButton" Checked="LineButton_Checked">Line</ToggleButton>
